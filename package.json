@@ -1,0 +1,16 @@
+{
+  "name": "duckmanager",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "private": true,
+  "keywords": [],
+  "author": "foxdevtime",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "electron": "^35.0.0"
+  }
+}
