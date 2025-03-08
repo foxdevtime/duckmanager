@@ -1,0 +1,78 @@
+name: Build and Release for Linux
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-linux:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest  # Последняя версия Ubuntu
+          - ubuntu-22.04   # Ubuntu 22.04 LTS
+          - ubuntu-20.04   # Ubuntu 20.04 LTS
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      - name: Cache apt packages
+        uses: actions/cache@v3
+        with:
+          path: /var/cache/apt
+          key: apt-${{ runner.os }}-${{ hashFiles('**/apt-packages.txt') }}
+          restore-keys: |
+            apt-${{ runner.os }}-
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libfuse2 fakeroot xvfb wine64 wine32
+
+      - name: Install npm dependencies
+        run: |
+          echo "Starting npm install"
+          npm install
+          echo "npm install completed"
+
+      - name: Build for Linux
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          echo "Starting build on ${{ matrix.os }}"
+          xvfb-run -a npm run build:linux
+          echo "Build completed successfully"
+
+      - name: Publish for Linux
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          echo "Starting publish on ${{ matrix.os }}"
+          npm run publish:linux
+          echo "Publish completed"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build-${{ matrix.os }}
+          path: |
+            dist/*.deb
+            dist/*.AppImage
