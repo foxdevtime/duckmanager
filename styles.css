@@ -154,7 +154,6 @@ h1 {
     color: #dc3545;
 }
 
-/* Модальное окно */
 .modal {
     display: none;
     position: fixed;
@@ -239,7 +238,6 @@ h1 {
     background-color: #005bb5;
 }
 
-/* Окно проекта */
 .task-window {
     display: flex;
     flex-direction: column;
@@ -421,15 +419,15 @@ h1 {
 .task-manager .delete-btn,
 .task-manager .delete-task-btn {
     color: #889BBEFF;
-    font-size: 18px; /* Увеличиваем для сходства с кнопками в project-item */
+    font-size: 18px;
 }
 
 .task-manager .add-task-btn:hover,
 .task-manager .delete-btn:hover,
 .task-manager .delete-task-btn:hover {
-    color: #005bb5; /* Синий при наведении, как у кнопок в index.html */
+    color: #005bb5;
 }
 
 .task-manager .delete-task-btn:hover {
-    color: #dc3545; /* Красный для удаления, как в index.html */
+    color: #dc3545;
 }

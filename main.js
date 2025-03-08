@@ -9,12 +9,10 @@ let projects = [];
 const dataDir = path.join(os.homedir(), '.local', 'share', '.duckmanager');
 const dataFile = path.join(dataDir, 'projects.json');
 
-// Создаём директорию, если её нет
 if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
 }
 
-// Загружаем проекты из файла или инициализируем пустой массив
 function loadProjects() {
     if (fs.existsSync(dataFile)) {
         const data = fs.readFileSync(dataFile, 'utf8');
@@ -24,7 +22,6 @@ function loadProjects() {
     }
 }
 
-// Сохраняем проекты в файл
 function saveProjects() {
     fs.writeFileSync(dataFile, JSON.stringify(projects, null, 2));
 }
@@ -43,7 +40,7 @@ function createMainWindow() {
     });
     mainWindow.loadFile('index.html');
     mainWindow.setMinimumSize(500, 400);
-    // mainWindow.webContents.openDevTools(); // Для отладки
+    // mainWindow.webContents.openDevTools();
 }
 
 function createProjectWindow(projectId) {
@@ -75,8 +72,8 @@ const createMenu = () => {
                 {
                     label: 'Themes',
                     submenu: [
-                        { label: 'Light', enabled: false }, // Заблокировано
-                        { label: 'Dark', enabled: false },
+                        { label: 'Duck Blue', enabled: false },
+                        { label: 'Duck Green', enabled: false },
                         { label: 'Duck Yellow', enabled: false }
                     ]
                 },
@@ -88,7 +85,7 @@ const createMenu = () => {
             submenu: [
                 {
                     label: 'Open Project Folder',
-                    click: () => shell.openPath(dataDir) // Открывает папку с projects.json
+                    click: () => shell.openPath(dataDir) // dir projects.json
                 },
                 { label: 'Refresh', accelerator: 'F5', click: () => mainWindow.webContents.send('refresh-projects') }
             ]
@@ -100,7 +97,7 @@ const createMenu = () => {
                 { type: 'separator' },
                 {
                     label: 'About DuckManager',
-                    click: () => shell.openExternal('https://github.com/foxdevtime/duckmanager') // Переход на GitHub
+                    click: () => shell.openExternal('https://github.com/foxdevtime/duckmanager')
                 }
             ]
         }
@@ -124,7 +121,6 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
 
-// IPC для работы с проектами
 ipcMain.on('open-project', (event, projectId) => {
     createProjectWindow(projectId);
 });
@@ -141,7 +137,7 @@ ipcMain.on('save-projects', (event, updatedProjects) => {
 ipcMain.on('save-project-content', (event, projectId, content) => {
     const project = projects.find(p => p.id === parseInt(projectId));
     if (project) {
-        project.content = content; // Сохраняем содержимое проекта
+        project.content = content;
         saveProjects();
     }
 });

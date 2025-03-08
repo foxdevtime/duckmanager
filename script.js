@@ -26,11 +26,11 @@ ipcRenderer.on('projects-data', (event, data) => {
     projects = data;
     renderProjects();
 });
-ipcRenderer.send('get-projects'); // Загружаем проекты при старте
+ipcRenderer.send('get-projects');
 
 function addProject() {
     const projectId = projects.length ? projects[projects.length - 1].id + 1 : 1;
-    const projectName = document.getElementById('projectName').value || `Проект ${projectId}`;
+    const projectName = document.getElementById('projectName').value || `Project ${projectId}`;
     const projectDesc = document.getElementById('projectDesc').value;
     const createdDate = new Date().toISOString().split('T')[0];
     projects.push({ id: projectId, name: projectName, desc: projectDesc, created: createdDate, content: [] });
@@ -41,7 +41,7 @@ function addProject() {
     document.getElementById('projectDesc').value = '';
 
     quackSound.play().catch(error => {
-        console.error('Ошибка воспроизведения звука:', error);
+        console.error('Error play sound:', error);
     });
 }
 
@@ -54,7 +54,7 @@ function renderProjects() {
         projectItem.innerHTML = `
             <div>
                 <span>${project.name}</span>
-                <small>${project.desc || 'Без описания'}</small>
+                <small>${project.desc || 'No description :('}</small>
             </div>
             <div>
                 <small style="
@@ -91,7 +91,7 @@ function changeProject(projectId) {
         document.getElementById('editProjectName').value = project.name;
         document.getElementById('editProjectDesc').value = project.desc || '';
         settingsModal.style.display = 'block';
-        settingsModal.dataset.projectId = projectId; // Сохраняем ID проекта в data-атрибуте
+        settingsModal.dataset.projectId = projectId;
     }
 }
 
