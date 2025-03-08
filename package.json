@@ -10,13 +10,23 @@
   "private": true,
   "keywords": [],
   "author": "foxdevtime",
+  "build": {
+    "appId": "xyz.foxdevtime.duckmanager",
+    "productName": "DuckManager",
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    },
+    "snap": {
+      "publish": false
+    }
+  },
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "electron": "^35.0.0",
-    "electron-builder": "^25.1.8"
-  },
-  "dependencies": {
     "electron": "^35.0.0",
     "electron-builder": "^25.1.8"
   }
